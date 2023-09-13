@@ -1,0 +1,43 @@
+name: 'Operate on an ASDF System'
+description: >-
+  Use ASDF to operate on a Common Lisp system.
+branding:
+  icon: box
+  color: blue
+inputs:
+  implementation:
+    description: |
+      The Common Lisp implementation to use. This can be one of the
+      following values:
+
+        abcl clisp ecl sbcl
+
+      in the future we would like to support all of
+
+        abcl clasp ecl gcl sbcl
+      
+    default: 'sbcl'
+
+  system:
+    description: |
+      The Common Lisp system to operate on.
+    required: true
+
+  operation:
+    description: |
+      The ASDF operation to perform.
+
+      See: https://asdf.common-lisp.dev/asdf/Predefined-operations-of-ASDF.html
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Perform ASDF Operation'
+      shell: sh
+      run: |
+        ${{ github.action_path }}/with_lisp_implementation ${{ inputs.implementation }} <<EOF
+        (require '#:asdf)
+        (require '#:${{ inputs.system }})
+        (asdf:operate '${{ inputs.operation }} '#:${{ inputs.system }})
+        EOF
