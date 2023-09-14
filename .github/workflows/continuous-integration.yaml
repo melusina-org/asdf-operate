@@ -10,7 +10,7 @@ jobs:
         implementation: ['abcl', 'sbcl']
         os: ['ubuntu-latest', 'macos-11', 'macos-12', 'macos-13']
     runs-on: '${{ matrix.os }}'
-    name: 'Install Common Lisp'
+    name: 'Exercise on Tier 1 Platform'
     steps:
       - uses: actions/checkout@v3
       - name: 'Install MacPorts'
@@ -35,7 +35,7 @@ jobs:
         implementation: ['clisp', 'ecl', 'gcl']
         os: ['ubuntu-latest', 'macos-11', 'macos-12', 'macos-13']
     runs-on: '${{ matrix.os }}'
-    name: 'Install Common Lisp'
+    name: 'Exercise on Tier 2 Platform'
     steps:
       - uses: actions/checkout@v3
       - name: 'Install MacPorts'
