@@ -1,0 +1,57 @@
+name: 'Continuous Integration'
+on:
+  - workflow_dispatch
+  - push
+
+jobs:
+  exercise-on-tier-1-platforms:
+    strategy:
+      matrix:
+        implementation: ['abcl', 'ecl', 'sbcl']
+        os: ['ubuntu-latest', 'macos-11', 'macos-12', 'macos-13']
+    runs-on: '${{ matrix.os }}'
+    name: 'Install Common Lisp'
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Install MacPorts'
+        if: runner.os == 'macOS'
+        uses: melusina-org/setup-macports@v1
+      - uses: melusina-org/setup-common-lisp@v1
+        with:
+          implementation: '${{ matrix.implementation }}'
+      - uses: melusina-org/setup-quicklisp@v1
+        with:
+          implementation: '${{ matrix.implementation }}'
+      - uses: ./
+        with:
+          implementation: '${{ matrix.implementation }}'
+          system: 'alexandria'
+          operation: 'compile-op'
+
+  exercise-on-tier-2-platforms:
+    needs: exercise-on-tier-1-platforms
+    strategy:
+      matrix:
+        implementation: ['clisp', 'gcl']
+        os: ['ubuntu-latest', 'macos-11', 'macos-12', 'macos-13']
+    runs-on: '${{ matrix.os }}'
+    name: 'Install Common Lisp'
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Install MacPorts'
+        if: runner.os == 'macOS'
+        uses: melusina-org/setup-macports@v1
+      - uses: melusina-org/setup-common-lisp@v1
+        continue-on-error: true
+        with:
+          implementation: '${{ matrix.implementation }}'
+      - uses: melusina-org/setup-quicklisp@v1
+        continue-on-error: true
+        with:
+          implementation: '${{ matrix.implementation }}'
+      - uses: ./
+        continue-on-error: true
+        with:
+          implementation: '${{ matrix.implementation }}'
+          system: 'alexandria'
+          operation: 'compile-op'
