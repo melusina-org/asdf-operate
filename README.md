@@ -57,7 +57,7 @@ on:
   - push
 
 jobs:
-  install-quicklisp-on-tier-1-platforms:
+  exercise-on-tier-1-platforms:
     strategy:
       matrix:
         implementation: ['abcl', 'ecl', 'sbcl']
@@ -75,7 +75,7 @@ jobs:
       - uses: melusina-org/setup-quicklisp@v1
         with:
           implementation: '${{ matrix.implementation }}'
-      - uses: ./
+      - uses: melusina-org/asdf-operate@v1
         with:
           implementation: '${{ matrix.implementation }}'
           system: 'alexandria'
