@@ -37,7 +37,15 @@ runs:
       shell: sh
       run: |
         ${{ github.action_path }}/with_lisp_implementation ${{ inputs.implementation }} <<EOF
-        (require '#:asdf)
-        (require '#:${{ inputs.system }})
+        (handler-case
+          (progn
+           (require '#:asdf)
+           (require '#:${{ inputs.system }}))
+          (error (c)
+            (format *trace-output* "~&Failure: ~A~&" c)
+            (uiop:quit 1))
+          (asdf:missing-dependency (c)
+            (format *trace-output* "~&Failure: ~A~&" c)
+            (uiop:quit 1)))
         (asdf:operate '${{ inputs.operation }} '#:${{ inputs.system }})
         EOF

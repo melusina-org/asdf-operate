@@ -22,11 +22,13 @@ jobs:
       - uses: melusina-org/setup-quicklisp@v1
         with:
           implementation: '${{ matrix.implementation }}'
+          additional-systems: >-
+            alexandria            
       - uses: ./
         with:
           implementation: '${{ matrix.implementation }}'
           system: 'alexandria'
-          operation: 'compile-op'
+          operation: 'asdf:compile-op'
 
   exercise-on-tier-2-platforms:
     needs: exercise-on-tier-1-platforms
@@ -49,9 +51,11 @@ jobs:
         continue-on-error: true
         with:
           implementation: '${{ matrix.implementation }}'
+          additional-systems: >-
+            alexandria            
       - uses: ./
         continue-on-error: true
         with:
           implementation: '${{ matrix.implementation }}'
           system: 'alexandria'
-          operation: 'compile-op'
+          operation: 'asdf:compile-op'
