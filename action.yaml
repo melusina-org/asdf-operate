@@ -36,7 +36,7 @@ runs:
     - name: 'Perform ASDF Operation'
       shell: sh
       run: |
-        ${{ github.action_path }}/with_lisp_implementation ${{ inputs.implementation }} <<EOF
+        ${GITHUB_ACTION_PATH}/with_lisp_implementation ${{ inputs.implementation }} <<EOF
         (handler-case
           (progn
            (require '#:asdf)

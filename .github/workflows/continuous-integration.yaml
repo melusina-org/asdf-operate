@@ -13,6 +13,9 @@ jobs:
       matrix:
         implementation: ['abcl', 'sbcl']
         os: ['ubuntu-latest', 'macos-latest']
+        include:
+          - implementation: 'sbcl'
+            os: 'windows-latest'
     runs-on: '${{ matrix.os }}'
     name: 'Exercise on Tier 1 Platform'
     steps:
